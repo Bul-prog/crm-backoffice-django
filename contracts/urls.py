@@ -10,5 +10,7 @@ urlpatterns = [
     path('for-customer/<int:customer_id>/new', ContractCreateForCustomerView.as_view(), name='create_for_customer'),
     path('<int:pk>', ContractDetailView.as_view(), name='detail'),
     path('<int:pk>/edit', ContractUpdateView.as_view(), name='edit'),
+    path('<int:pk>/edit/', ContractUpdateView.as_view(), name='edit_slash'),
     path('<int:pk>/delete', ContractDeleteView.as_view(), name='delete'),
+    path('<int:pk>/delete/', ContractDeleteView.as_view(), name='delete_slash'),
 ]

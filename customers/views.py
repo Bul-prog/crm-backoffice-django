@@ -4,7 +4,7 @@ from django.http import HttpResponseNotAllowed
 
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 
 from .models import Customer
 from leads.models import Lead
@@ -85,4 +85,26 @@ class CustomerCreatePostView(PermissionRequiredMixin, View):
         return redirect('contracts:create_for_customer', customer_id=customer.pk)
 
     def get(self, request, *args, **kwargs):
-        return HttpResponseNotAllowed(['POST'])
+        return redirect('leads:list')
+
+
+class CustomerUpdateView(PermissionRequiredMixin, UpdateView):
+    model = Lead
+    template_name = 'customers/customers-edit.html'
+    permission_required = 'customers.change_customer'
+
+    # редактируем поля лида, которые логично менять у клиента
+    fields = ['first_name', 'last_name', 'phone', 'email']
+
+    def get_object(self, queryset=None):
+        customer = get_object_or_404(Customer, pk=self.kwargs['pk'])
+        return customer.lead
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        # чтобы шаблон использовал object.pk (customer.pk), а не lead.pk
+        ctx['object'] = get_object_or_404(Customer, pk=self.kwargs['pk'])
+        return ctx
+
+    def get_success_url(self):
+        return reverse_lazy('customers:detail', kwargs={'pk': self.kwargs['pk']})

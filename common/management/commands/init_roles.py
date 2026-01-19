@@ -22,7 +22,7 @@ class Command(BaseCommand):
                 ('ads', 'ad', ['add', 'change', 'view', 'delete']),
             ],
             'Менеджер': [
-                ('contracts', 'contract', ['add', 'change', 'view', 'delete']),
+                ('contracts', 'contract', ['add', 'change', 'view']),
                 ('customers', 'customer', ['add', 'change', 'view', 'delete']),
                 ('leads', 'lead', ['view']),
                 ('ads', 'ad', ['view']),
